@@ -12,19 +12,22 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="page-head"><h1>SONG LIST</h1><small>歌える曲リスト</small></header>
-<main><section class="reveal" style="padding-top:50px">
-  <div class="embed" id="songEmbed">
+<header class="ph" data-wm="SONG LIST"><p class="no">03</p><h1>SONG LIST</h1><small>歌える曲リスト</small><div class="bar"></div></header>
+<main class="pg reveal">
+  <div class="eq"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="frame embed" id="songEmbed">
     <iframe title="歌える曲リスト" loading="lazy"></iframe>
     <div class="cap"><span>歌える曲リスト（うたみた）</span><a class="songsLink" href="#" style="color:var(--purple);border-bottom:1px solid var(--purple)">別ウィンドウで開く ↗</a></div>
   </div>
-  <form class="req card" id="reqForm">
-    <h3>REQUEST</h3>
-    <div class="row"><input id="rName" placeholder="お名前（ニックネーム）" maxlength="20" required><select id="rSong" required></select></div>
-    <textarea id="rMsg" placeholder="ひとこと（任意）" maxlength="100"></textarea>
-    <button class="cta" type="submit">リクエストを送る</button>
-    <ul class="sent" id="sent"></ul>
-  </form>
-</section></main>
+  <div class="ticket">
+    <div class="stub"><b>REQUEST</b><span>ADMIT ONE</span></div>
+    <form id="reqForm">
+      <div class="row"><input id="rName" placeholder="お名前（ニックネーム）" maxlength="20" required><select id="rSong" required></select></div>
+      <textarea id="rMsg" placeholder="ひとこと（任意）" maxlength="100"></textarea>
+      <button class="cta" type="submit">リクエストを送る</button>
+      <ul class="sent" id="sent"></ul>
+    </form>
+  </div>
+</main>
 <script src="app.js"></script>
 </body></html>

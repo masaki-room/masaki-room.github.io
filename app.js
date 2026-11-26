@@ -98,6 +98,7 @@ H("#newsList",SITE.news.map(n=>`<li><time>${esc(n[0])}</time><span class="tag">$
 const en=["MON","TUE","WED","THU","FRI","SAT","SUN"];
 function weekDays(){const now=new Date(),dow=(now.getDay()+6)%7;const mon=new Date(now);mon.setDate(now.getDate()-dow);mon.setHours(0,0,0,0);const out=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);out.push({d,i,s:SITE.schedule[d.getDay()],isToday:i===dow,past:i<dow})}return out}
 H("#week",weekDays().map(({d,i,s,isToday})=>`<div class="day ${isToday?'today':''} ${s?'':'off'}"><div class="d">${d.getMonth()+1}/${d.getDate()}<small>${en[i]}</small></div><div class="t">${s?`<b>${esc(s.title)}</b><span>${esc(s.time)} ／ ${esc(s.place)}</span>`:`<span>お休み</span>`}</div><div>${isToday&&s?'<span class="badge live">TODAY</span>':s?'<span class="badge">LIVE</span>':''}</div></div>`).join(""));
+if($("#weekRange")){const w=weekDays();const a=w[0].d,b=w[6].d;$("#weekRange").innerHTML=`<b>${a.getMonth()+1}/${a.getDate()}</b> — <b>${b.getMonth()+1}/${b.getDate()}</b>`}
 if($("#weekNote"))$("#weekNote").textContent=SITE.scheduleNote;
 if($("#nextLive")){const nx=weekDays().find(x=>x.s&&!x.past);$("#nextLive").innerHTML=nx?`<div class="big"><small>NEXT LIVE</small>${nx.d.getMonth()+1}/${nx.d.getDate()} ${en[nx.i]} ${esc(nx.s.time)}</div><div>${esc(nx.s.title)}<br><span style="opacity:.7;font-size:13px">${esc(nx.s.place)}</span></div><a class="cta sm" href="${esc(SITE.watchUrl)}" target="_blank" rel="noopener">配信へ</a>`:`<div>今週の配信予定はありません。Xでお知らせします。</div>`}
 
