@@ -1,0 +1,173 @@
+/* =========================================================
+   更新はここだけ（本番では「かんたん更新ページ」から変更できます）
+   ========================================================= */
+const SITE = {
+  name: "真咲",
+  catch: "好きな歌で、つながる。",
+  catch2: "それが、うちの生きる理由。",
+  ctaText: "配信を見にいく",
+  season: "winter",           // "none" / "winter"(雪) ※季節・イベント装飾の切り替え
+  watchUrl: "https://www.mirrativ.com/user/158657695",
+  news: [
+    ["2026.11.25", "INFO", "公式サイトを公開しました。"],
+    ["2026.11.25", "INFO", "歌える曲リストとリクエスト機能を追加しました。"],
+    ["2026.11.24", "LIVE", "今週の配信予定を更新しました。"]
+  ],
+  // 今週の配信予定: 曜日(0=日〜6=土)  ※サンプル（実際の予定に差し替え）
+  schedule: {
+    1: {time:"22:00〜", title:"雑談配信", place:"Mirrativ"},
+    3: {time:"22:00〜", title:"歌枠", place:"Mirrativ"},
+    5: {time:"21:30〜", title:"歌枠", place:"YouTube"},
+    6: {time:"23:00〜", title:"ゲーム配信", place:"Mirrativ"}
+  },
+  scheduleNote: "※予定は変更になることがあります。最新情報はXでお知らせします。",
+  songsUrl: "https://utalis.github.io/u/masaki06-utamita",
+  songs: [ // リクエスト欄の候補（※サンプル。本番は歌える曲リストに合わせて差し替え）
+    ["サンプル曲 1","アーティスト名","J-POP"],
+    ["サンプル曲 2","アーティスト名","ボカロ"],
+    ["サンプル曲 3","アーティスト名","アニソン"]
+  ],
+  links: [
+    ["X", "@masaki_0624513", "https://x.com/masaki_0624513"],
+    ["YouTube", "チャンネル", "https://www.youtube.com/channel/UCgAyIApoO42E0QedKv5QtaA"],
+    ["Mirrativ", "配信ページ", "https://www.mirrativ.com/user/158657695"],
+    ["うたみた", "歌える曲リスト", "https://utalis.github.io/u/masaki06-utamita"]
+  ],
+  profile: [
+    ["名前・読み方", "真咲（まさき）"],
+    ["誕生日", "9/12"],
+    ["性格", "クール、低音女子"],
+    ["趣味・特技", "歌（カラオケ）、ダンス、イラスト"],
+    ["活動内容", "歌枠（メイン）、ゲーム配信"],
+    ["イメージカラー", "紫"],
+    ["ファンネーム", "まさリス"],
+    ["好きなもの", "寿司、唐揚げ、チャーハン"],
+    ["推し歌い手", "いれいす 様"],
+    ["一言メッセージ", "真咲として新たにスタートした私を、応援しにきてくれると助かります！"]
+  ]
+};
+const PAGES=[["index.html","HOME","トップ"],["profile.html","PROFILE","プロフィール"],["schedule.html","SCHEDULE","配信予定"],["songs.html","SONGS","歌える曲"],["omikuji.html","OMIKUJI","おみくじ・スタンプ"],["links.html","LINKS","リンク"]];
+const FORTUNES = [
+  {r:"大吉", m:"今夜は想いがまっすぐ届く日。\n気になることに踏み出して。", l:"ラッキー：紫の光"},
+  {r:"吉",   m:"静かな夜に、いい流れがやってくる。\nゆっくり歩けば大丈夫。", l:"ラッキー：蝶のモチーフ"},
+  {r:"中吉", m:"小さな楽しみが重なる一日。\n好きな曲を聴いて整えて。", l:"ラッキー：音符"},
+  {r:"小吉", m:"焦らなければ、ちゃんと追いつく。\n深呼吸をひとつ。", l:"ラッキー：夜空の散歩"},
+  {r:"末吉", m:"控えめがちょうどいい日。\n夜ふかしは、ほどほどに。", l:"ラッキー：温かい飲み物"},
+  {r:"凶",   m:"今日は休むのも作戦。\n明日の自分にバトンを渡そう。", l:"ラッキー：早めのおやすみ"}
+];
+const FW=[18,28,22,18,10,4];
+
+/* ===== helpers ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function toast(t){const e=$("#toast");if(!e)return;e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),2400)}
+const cur=(location.pathname.split("/").pop()||"index.html");
+
+/* ===== shared chrome ===== */
+(function(){
+  document.body.insertAdjacentHTML("afterbegin",
+   `<canvas id="stars"></canvas><div id="fx"></div>
+    <svg width="0" height="0" style="position:absolute"><defs>
+     <symbol id="bfly" viewBox="0 0 100 100">
+      <g class="wl"><path d="M50 48C38 18 12 14 8 30c-3 14 14 22 28 24C22 58 14 74 26 82c12 7 20-12 24-26z" fill="#a77ee8" fill-opacity=".85" stroke="#d9c8f5" stroke-width="1.2"/></g>
+      <g class="wr"><path d="M50 48C62 18 88 14 92 30c3 14-14 22-28 24C78 58 86 74 74 82c-12 7-20-12-24-26z" fill="#a77ee8" fill-opacity=".85" stroke="#d9c8f5" stroke-width="1.2"/></g>
+      <ellipse cx="50" cy="52" rx="2.6" ry="16" fill="#d9c8f5"/>
+      <path d="M49 38C46 28 42 24 38 22M51 38C54 28 58 24 62 22" stroke="#d9c8f5" stroke-width="1.2" fill="none" stroke-linecap="round"/></symbol>
+     <symbol id="stampbf" viewBox="0 0 100 100">
+      <path d="M50 48C38 18 12 14 8 30c-3 14 14 22 28 24C22 58 14 74 26 82c12 7 20-12 24-26z" fill="#a77ee8" stroke="#d9c8f5" stroke-width="2"/>
+      <path d="M50 48C62 18 88 14 92 30c3 14-14 22-28 24C78 58 86 74 74 82c-12 7-20-12-24-26z" fill="#a77ee8" stroke="#d9c8f5" stroke-width="2"/>
+      <ellipse cx="50" cy="52" rx="3" ry="16" fill="#d9c8f5"/></symbol></defs></svg>
+    <nav><a class="logo" href="index.html">MASAKI</a>
+      <ul>${PAGES.slice(1).map(p=>`<li><a href="${p[0]}" class="${p[0]===cur?'cur':''}">${p[1]}</a></li>`).join("")}</ul>
+      <button class="burger" id="burger" aria-label="menu"><i></i></button></nav>
+    <div class="mmenu" id="mmenu">${PAGES.map(p=>`<a href="${p[0]}">${p[1]}<small>${p[2]}</small></a>`).join("")}</div>
+    <div class="toast" id="toast"></div>`);
+  $("#burger").onclick=()=>{$("#burger").classList.toggle("open");$("#mmenu").classList.toggle("open")};
+  document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><div class="credit">Site by イロハミント（湊音ヒロ）</div></footer>`);
+})();
+
+/* ===== opening (premium) ===== */
+(function(){
+  if(cur!=="index.html"&&cur!=="")return;
+  let seen=false;try{seen=sessionStorage.getItem("mk_op")}catch(e){}
+  if(seen)return;
+  const o=document.createElement("div");o.id="opening";
+  o.innerHTML=`<div class="ob"><svg viewBox="0 0 100 100"><use href="#bfly"/></svg></div><div class="on">真咲</div><div class="os">MASAKI OFFICIAL SITE</div><div class="ot">TAP TO ENTER</div>`;
+  document.body.appendChild(o);document.body.style.overflow="hidden";
+  const close=()=>{o.classList.add("gone");document.body.style.overflow="";try{sessionStorage.setItem("mk_op","1")}catch(e){}setTimeout(()=>o.remove(),1400)};
+  o.addEventListener("click",close);setTimeout(close,6000);
+})();
+
+/* ===== page parts ===== */
+const H=(sel,html)=>{const e=$(sel);if(e)e.innerHTML=html};
+if($("#h-name")){$("#h-name").textContent=SITE.name;$(".hero .lead").innerHTML=esc(SITE.catch)+"<br>"+esc(SITE.catch2);const a=$("#h-cta");a.href=SITE.watchUrl;a.target="_blank";a.rel="noopener";a.textContent=SITE.ctaText}
+H("#newsList",SITE.news.map(n=>`<li><time>${esc(n[0])}</time><span class="tag">${esc(n[1])}</span><span>${esc(n[2])}</span></li>`).join(""));
+
+const en=["MON","TUE","WED","THU","FRI","SAT","SUN"];
+function weekDays(){const now=new Date(),dow=(now.getDay()+6)%7;const mon=new Date(now);mon.setDate(now.getDate()-dow);mon.setHours(0,0,0,0);const out=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);out.push({d,i,s:SITE.schedule[d.getDay()],isToday:i===dow,past:i<dow})}return out}
+H("#week",weekDays().map(({d,i,s,isToday})=>`<div class="day ${isToday?'today':''} ${s?'':'off'}"><div class="d">${d.getMonth()+1}/${d.getDate()}<small>${en[i]}</small></div><div class="t">${s?`<b>${esc(s.title)}</b><span>${esc(s.time)} ／ ${esc(s.place)}</span>`:`<span>お休み</span>`}</div><div>${isToday&&s?'<span class="badge live">TODAY</span>':s?'<span class="badge">LIVE</span>':''}</div></div>`).join(""));
+if($("#weekNote"))$("#weekNote").textContent=SITE.scheduleNote;
+if($("#nextLive")){const nx=weekDays().find(x=>x.s&&!x.past);$("#nextLive").innerHTML=nx?`<div class="big"><small>NEXT LIVE</small>${nx.d.getMonth()+1}/${nx.d.getDate()} ${en[nx.i]} ${esc(nx.s.time)}</div><div>${esc(nx.s.title)}<br><span style="opacity:.7;font-size:13px">${esc(nx.s.place)}</span></div><a class="cta sm" href="${esc(SITE.watchUrl)}" target="_blank" rel="noopener">配信へ</a>`:`<div>今週の配信予定はありません。Xでお知らせします。</div>`}
+
+H("#p-dl",SITE.profile.map(i=>`<div class="row"><dt>${esc(i[0])}</dt><dd>${esc(i[1])}</dd></div>`).join(""));
+H("#linkList",SITE.links.map(l=>`<a class="lk-card" href="${esc(l[2])}" target="_blank" rel="noopener"><b>${esc(l[0])}</b><span>${esc(l[1])}</span></a>`).join(""));
+if($("#songEmbed")){$("#songEmbed iframe").src=SITE.songsUrl;document.querySelectorAll(".songsLink").forEach(a=>{a.href=SITE.songsUrl;a.target="_blank";a.rel="noopener"})}
+
+/* request */
+if($("#reqForm")){
+  $("#rSong").innerHTML=`<option value="" disabled selected>曲を選ぶ</option>`+SITE.songs.map((s,i)=>`<option value="${i}">${esc(s[0])} / ${esc(s[1])}</option>`).join("")+`<option value="other">リストにない曲（ひとことに記入）</option>`;
+  const renderSent=()=>{const l=ls.get("mk_req",[]);$("#sent").innerHTML=l.slice(-3).reverse().map(r=>`<li>♪ ${esc(r.song)} <span style="opacity:.6">— ${esc(r.name)}</span></li>`).join("")};
+  $("#reqForm").addEventListener("submit",e=>{e.preventDefault();const v=$("#rSong").value,song=v==="other"?"（リスト外）":SITE.songs[v][0];const l=ls.get("mk_req",[]);l.push({name:$("#rName").value,song,msg:$("#rMsg").value,at:Date.now()});ls.set("mk_req",l);e.target.reset();renderSent();toast("リクエストを送りました")});
+  renderSent();
+}
+
+/* omikuji + stamp */
+function pick(){let t=FW.reduce((a,b)=>a+b),r=Math.random()*t;for(let i=0;i<FW.length;i++){if((r-=FW[i])<0)return FORTUNES[i]}return FORTUNES[1]}
+const N=10;
+function renderStamps(){
+  if(!$("#stamps"))return;
+  const st=ls.get("mk_stamp",{days:[],done:0});const c=st.days.length;
+  let h="";for(let i=0;i<N;i++)h+=i<c?`<div class="st on"><svg><use href="#stampbf"/></svg></div>`:`<div class="st">${i+1}</div>`;
+  $("#stamps").innerHTML=h;
+  $("#stInfo").innerHTML=c>=N?`<b>COMPLETE!</b> コンプリートおめでとう。配信中に画面を見せてね。`:`あと <b>${N-c}</b> 個でコンプリート${st.done?`（達成 ${st.done} 回）`:""}`;
+  const done=st.days.includes(today());const b=$("#stampBtn");b.disabled=done;b.style.opacity=done?.5:1;b.textContent=done?"今日はもう押しました":"今日のスタンプを押す";
+}
+function stampDay(auto){const st=ls.get("mk_stamp",{days:[],done:0});if(st.days.includes(today()))return;if(st.days.length>=N){st.days=[];st.done=(st.done||0)+1}st.days.push(today());ls.set("mk_stamp",st);renderStamps();toast(auto?"おみくじのお礼に、スタンプを1つ押しました":"スタンプを押しました")}
+if($("#draw")){
+  const show=f=>{$("#slip").innerHTML=`<div class="r">${f.r}</div><div class="m">${esc(f.m).replace(/\n/g,"<br>")}</div><div class="lk">${esc(f.l)}</div>`};
+  const lock=()=>{$("#draw").textContent="今日はもう引きました";$("#draw").disabled=true;$("#draw").style.opacity=.5};
+  const s=ls.get("mk_omi",null);if(s&&s.d===today()){show(s.f);lock()}
+  $("#draw").onclick=()=>{const s=ls.get("mk_omi",null);if(s&&s.d===today())return;const f=pick();ls.set("mk_omi",{d:today(),f});show(f);lock();stampDay(true)};
+  $("#stampBtn").onclick=()=>stampDay(false);
+  renderStamps();
+}
+
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* stars */
+(function(){
+  const cv=$("#stars"),cx=cv.getContext("2d");let W,H,stars=[],sh=null;
+  function size(){const r=devicePixelRatio||1;W=cv.width=innerWidth*r;H=cv.height=innerHeight*r;stars=[];const n=Math.round(innerWidth*innerHeight/5500);for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*1.2+.3)*r,p:Math.random()*6.28,s:Math.random()*.02+.005,c:Math.random()<.25?"167,126,232":"217,200,245"})}
+  size();addEventListener("resize",size);
+  const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  (function loop(){cx.clearRect(0,0,W,H);for(const s of stars){s.p+=s.s;cx.fillStyle=`rgba(${s.c},${.35+.65*Math.abs(Math.sin(s.p))})`;cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill()}
+    if(!reduce){if(!sh&&Math.random()<.003){const r=devicePixelRatio||1;sh={x:Math.random()*W*.8+W*.2,y:Math.random()*H*.3,l:0,v:12*r}}
+      if(sh){const g=cx.createLinearGradient(sh.x,sh.y,sh.x+sh.l,sh.y-sh.l*.5);g.addColorStop(0,"rgba(255,255,255,.9)");g.addColorStop(1,"rgba(167,126,232,0)");cx.strokeStyle=g;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(sh.x,sh.y);cx.lineTo(sh.x+sh.l,sh.y-sh.l*.5);cx.stroke();sh.x-=sh.v;sh.y+=sh.v*.5;sh.l=Math.min(sh.l+6,140);if(sh.x<-200||sh.y>H)sh=null}}
+    requestAnimationFrame(loop)})();
+})();
+
+/* butterflies, notes, season */
+(function(){
+  const fx=$("#fx");
+  const bfs=[{t:"12%",s:36,dx:34,dy:6,dl:0},{t:"38%",s:24,dx:44,dy:8,dl:-14},{t:"62%",s:30,dx:38,dy:7,dl:-26},{t:"80%",s:20,dx:52,dy:9,dl:-8}];
+  fx.innerHTML=bfs.map(b=>`<div class="bf" style="top:${b.t};--s:${b.s}px;--dx:${b.dx}s;--dy:${b.dy}s;--dl:${b.dl}s"><div class="in"><svg viewBox="0 0 100 100"><use href="#bfly"/></svg></div></div>`).join("");
+  const sym=["♪","♫","♩","♬"];let h="";
+  for(let i=0;i<9;i++)h+=`<span class="nt" style="left:${Math.round(Math.random()*95)}%;--s:${16+Math.round(Math.random()*16)}px;--du:${12+Math.round(Math.random()*10)}s;--dl:${-Math.round(Math.random()*20)}s">${sym[i%4]}</span>`;
+  if(SITE.season==="winter")for(let i=0;i<22;i++)h+=`<span class="snow" style="left:${Math.round(Math.random()*100)}%;--s:${8+Math.round(Math.random()*10)}px;--du:${9+Math.round(Math.random()*9)}s;--dl:${-Math.round(Math.random()*18)}s">${i%3?"•":"❄"}</span>`;
+  fx.insertAdjacentHTML("beforeend",h);
+})();
+if($("#watch2")){const a=$("#watch2");a.href=SITE.watchUrl;a.target="_blank";a.rel="noopener"}

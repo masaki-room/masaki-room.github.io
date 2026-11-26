@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SONG LIST | 真咲 MASAKI OFFICIAL</title>
+<meta name="description" content="真咲（VTuber・歌い手）の公式サイト。配信予定・歌える曲リスト・おみくじ・スタンプカード。">
+<meta name="theme-color" content="#14101f">
+<meta property="og:title" content="真咲 | MASAKI OFFICIAL"><meta property="og:image" content="img/masaki.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="page-head"><h1>SONG LIST</h1><small>歌える曲リスト</small></header>
+<main><section class="reveal" style="padding-top:50px">
+  <div class="embed" id="songEmbed">
+    <iframe title="歌える曲リスト" loading="lazy"></iframe>
+    <div class="cap"><span>歌える曲リスト（うたみた）</span><a class="songsLink" href="#" style="color:var(--purple);border-bottom:1px solid var(--purple)">別ウィンドウで開く ↗</a></div>
+  </div>
+  <form class="req card" id="reqForm">
+    <h3>REQUEST</h3>
+    <div class="row"><input id="rName" placeholder="お名前（ニックネーム）" maxlength="20" required><select id="rSong" required></select></div>
+    <textarea id="rMsg" placeholder="ひとこと（任意）" maxlength="100"></textarea>
+    <button class="cta" type="submit">リクエストを送る</button>
+    <ul class="sent" id="sent"></ul>
+  </form>
+</section></main>
+<script src="app.js"></script>
+</body></html>
