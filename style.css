@@ -368,3 +368,5 @@ body{background:radial-gradient(1200px 700px at 80% -10%,rgba(167,126,232,.16),t
 @media(max-width:620px){.ticket .row{grid-template-columns:1fr}}
 @media(min-width:821px){.h-chara img{height:calc(100svh - 160px);max-height:900px}.hero{padding-bottom:44px}.h-wm{top:auto;bottom:40px;transform:none;left:2vw;font-size:clamp(90px,14vw,200px)}}
 html{background:#0b0813}
+/* moon removed: soft light only */
+.h-chara::before{background:radial-gradient(circle,rgba(167,126,232,.42),rgba(167,126,232,.12) 48%,transparent 70%);box-shadow:none;opacity:1}
