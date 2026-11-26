@@ -211,3 +211,10 @@ nav ul a.cur{opacity:1;color:var(--purple)}
 .snow{position:absolute;top:-10px;color:#fff;opacity:0;animation:snowfall var(--du,12s) linear infinite;animation-delay:var(--dl,0s);font-size:var(--s,12px);text-shadow:0 0 8px rgba(217,200,245,.9)}
 @keyframes snowfall{0%{transform:translate(0,0);opacity:0}10%{opacity:.8}100%{transform:translate(40px,112vh);opacity:.1}}
 .sheet{padding:18px 20px;border:1px dashed var(--line);margin-top:16px;font-size:12.5px;opacity:.75}
+
+/* butterfly image */
+.bf img{display:block;width:100%;height:100%;object-fit:contain;animation:flapx .55s ease-in-out infinite alternate}
+@keyframes flapx{from{transform:scaleX(1)}to{transform:scaleX(.4)}}
+#opening .ob{width:110px;height:110px}
+#opening .ob img{display:block;width:100%;height:100%;object-fit:contain;animation:flapx .7s ease-in-out infinite alternate}
+.st img{width:72%;height:72%;object-fit:contain;animation:pop .5s both}

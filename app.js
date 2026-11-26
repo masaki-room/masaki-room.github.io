@@ -69,23 +69,13 @@ const cur=(location.pathname.split("/").pop()||"index.html");
 (function(){
   document.body.insertAdjacentHTML("afterbegin",
    `<canvas id="stars"></canvas><div id="fx"></div>
-    <svg width="0" height="0" style="position:absolute"><defs>
-     <symbol id="bfly" viewBox="0 0 100 100">
-      <g class="wl"><path d="M50 48C38 18 12 14 8 30c-3 14 14 22 28 24C22 58 14 74 26 82c12 7 20-12 24-26z" fill="#a77ee8" fill-opacity=".85" stroke="#d9c8f5" stroke-width="1.2"/></g>
-      <g class="wr"><path d="M50 48C62 18 88 14 92 30c3 14-14 22-28 24C78 58 86 74 74 82c-12 7-20-12-24-26z" fill="#a77ee8" fill-opacity=".85" stroke="#d9c8f5" stroke-width="1.2"/></g>
-      <ellipse cx="50" cy="52" rx="2.6" ry="16" fill="#d9c8f5"/>
-      <path d="M49 38C46 28 42 24 38 22M51 38C54 28 58 24 62 22" stroke="#d9c8f5" stroke-width="1.2" fill="none" stroke-linecap="round"/></symbol>
-     <symbol id="stampbf" viewBox="0 0 100 100">
-      <path d="M50 48C38 18 12 14 8 30c-3 14 14 22 28 24C22 58 14 74 26 82c12 7 20-12 24-26z" fill="#a77ee8" stroke="#d9c8f5" stroke-width="2"/>
-      <path d="M50 48C62 18 88 14 92 30c3 14-14 22-28 24C78 58 86 74 74 82c-12 7-20-12-24-26z" fill="#a77ee8" stroke="#d9c8f5" stroke-width="2"/>
-      <ellipse cx="50" cy="52" rx="3" ry="16" fill="#d9c8f5"/></symbol></defs></svg>
     <nav><a class="logo" href="index.html">MASAKI</a>
       <ul>${PAGES.slice(1).map(p=>`<li><a href="${p[0]}" class="${p[0]===cur?'cur':''}">${p[1]}</a></li>`).join("")}</ul>
       <button class="burger" id="burger" aria-label="menu"><i></i></button></nav>
     <div class="mmenu" id="mmenu">${PAGES.map(p=>`<a href="${p[0]}">${p[1]}<small>${p[2]}</small></a>`).join("")}</div>
     <div class="toast" id="toast"></div>`);
   $("#burger").onclick=()=>{$("#burger").classList.toggle("open");$("#mmenu").classList.toggle("open")};
-  document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><div class="credit">Site by イロハミント（湊音ヒロ）</div></footer>`);
+  document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><div class="credit">Site by イロハミント（湊音ヒロ）</div><div class="credit" style="opacity:.55">素材：蝶のイラスト／チコデザ</div></footer>`);
 })();
 
 /* ===== opening (premium) ===== */
@@ -94,7 +84,7 @@ const cur=(location.pathname.split("/").pop()||"index.html");
   let seen=false;try{seen=sessionStorage.getItem("mk_op")}catch(e){}
   if(seen)return;
   const o=document.createElement("div");o.id="opening";
-  o.innerHTML=`<div class="ob"><svg viewBox="0 0 100 100"><use href="#bfly"/></svg></div><div class="on">真咲</div><div class="os">MASAKI OFFICIAL SITE</div><div class="ot">TAP TO ENTER</div>`;
+  o.innerHTML=`<div class="ob"><img src="img/butterfly.webp" alt=""></div><div class="on">真咲</div><div class="os">MASAKI OFFICIAL SITE</div><div class="ot">TAP TO ENTER</div>`;
   document.body.appendChild(o);document.body.style.overflow="hidden";
   const close=()=>{o.classList.add("gone");document.body.style.overflow="";try{sessionStorage.setItem("mk_op","1")}catch(e){}setTimeout(()=>o.remove(),1400)};
   o.addEventListener("click",close);setTimeout(close,6000);
@@ -129,7 +119,7 @@ const N=10;
 function renderStamps(){
   if(!$("#stamps"))return;
   const st=ls.get("mk_stamp",{days:[],done:0});const c=st.days.length;
-  let h="";for(let i=0;i<N;i++)h+=i<c?`<div class="st on"><svg><use href="#stampbf"/></svg></div>`:`<div class="st">${i+1}</div>`;
+  let h="";for(let i=0;i<N;i++)h+=i<c?`<div class="st on"><img src="img/butterfly.webp" alt=""></div>`:`<div class="st">${i+1}</div>`;
   $("#stamps").innerHTML=h;
   $("#stInfo").innerHTML=c>=N?`<b>COMPLETE!</b> コンプリートおめでとう。配信中に画面を見せてね。`:`あと <b>${N-c}</b> 個でコンプリート${st.done?`（達成 ${st.done} 回）`:""}`;
   const done=st.days.includes(today());const b=$("#stampBtn");b.disabled=done;b.style.opacity=done?.5:1;b.textContent=done?"今日はもう押しました":"今日のスタンプを押す";
@@ -164,7 +154,7 @@ document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 (function(){
   const fx=$("#fx");
   const bfs=[{t:"12%",s:36,dx:34,dy:6,dl:0},{t:"38%",s:24,dx:44,dy:8,dl:-14},{t:"62%",s:30,dx:38,dy:7,dl:-26},{t:"80%",s:20,dx:52,dy:9,dl:-8}];
-  fx.innerHTML=bfs.map(b=>`<div class="bf" style="top:${b.t};--s:${b.s}px;--dx:${b.dx}s;--dy:${b.dy}s;--dl:${b.dl}s"><div class="in"><svg viewBox="0 0 100 100"><use href="#bfly"/></svg></div></div>`).join("");
+  fx.innerHTML=bfs.map(b=>`<div class="bf" style="top:${b.t};--s:${b.s}px;--dx:${b.dx}s;--dy:${b.dy}s;--dl:${b.dl}s"><div class="in"><img src="img/butterfly.webp" alt=""></div></div>`).join("");
   const sym=["♪","♫","♩","♬"];let h="";
   for(let i=0;i<9;i++)h+=`<span class="nt" style="left:${Math.round(Math.random()*95)}%;--s:${16+Math.round(Math.random()*16)}px;--du:${12+Math.round(Math.random()*10)}s;--dl:${-Math.round(Math.random()*20)}s">${sym[i%4]}</span>`;
   if(SITE.season==="winter")for(let i=0;i<22;i++)h+=`<span class="snow" style="left:${Math.round(Math.random()*100)}%;--s:${8+Math.round(Math.random()*10)}px;--du:${9+Math.round(Math.random()*9)}s;--dl:${-Math.round(Math.random()*18)}s">${i%3?"•":"❄"}</span>`;
