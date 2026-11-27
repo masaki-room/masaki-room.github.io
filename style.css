@@ -410,7 +410,7 @@ nav ul a:hover::after{width:100%}
 .h-vert{position:absolute!important;right:14px;top:50%;writing-mode:vertical-rl;font-family:var(--disp);font-size:11px;letter-spacing:.6em;color:var(--purple);opacity:.7;transform:translateY(-50%);z-index:3!important}
 .h-text h1{font-family:var(--sans);font-weight:700}
 .h-text .en{font-family:var(--disp);font-weight:500;letter-spacing:.7em}
-.h-text .roles{font-family:var(--disp);letter-spacing:.4em;display:inline-block;padding:6px 14px;margin-top:18px;border-left:3px solid var(--purple);background:linear-gradient(90deg,rgba(167,126,232,.18),transparent)}
+.h-text .roles{font-family:var(--disp);letter-spacing:.4em;display:inline-block;padding:6px 14px;margin-top:18px;background:linear-gradient(90deg,rgba(167,126,232,.18),transparent)}
 .h-wm{font-family:var(--disp);font-weight:700;-webkit-text-stroke:1px rgba(167,126,232,.18)}
 .gl{position:relative;display:flex;align-items:flex-end;justify-content:center;max-width:100%}
 .gl img.g{position:absolute;bottom:0;left:50%;opacity:0;transform:translateX(-50%);mix-blend-mode:screen;-webkit-mask-image:none;mask-image:none;animation:none;filter:none;pointer-events:none}
@@ -614,3 +614,4 @@ footer details.credits summary::-webkit-details-marker{display:none}
 footer details.credits summary::after{content:"+";font-size:14px;transition:transform .3s}
 footer details.credits[open] summary::after{transform:rotate(45deg)}
 footer details.credits .credit{margin-top:6px;opacity:.65}
+.h-text .roles{border-left:0!important;padding-left:0}
