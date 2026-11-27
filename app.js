@@ -127,7 +127,7 @@ function songRow(c){c=(c||"").normalize("NFD")[0]||"";const R=[["あ","あいう
 const MARK={favorite:"FAVORITE",learning:"練習中",ohako:"十八番",signature:"十八番"};
 function initSongs(D){
   const songs=D.songs.slice().sort((x,y)=>x.y.localeCompare(y.y,"ja")||x.ty.localeCompare(y.ty,"ja"));
-  SITE.songs=songs.map(s=>[s.t,s.a,""]);
+  SITE.songs=songs.map(s=>[s.t,s.a,""]);if(window.fillReqSongs)fillReqSongs();
   if($("#slL")){
     let row="全",q="",mode="all";
     const arts=new Set(songs.map(s=>s.a));
@@ -182,7 +182,7 @@ startSongs();
 
 /* request */
 if($("#reqForm")){
-  $("#rSong").innerHTML=`<option value="" disabled selected>曲を選ぶ</option>`+SITE.songs.map((s,i)=>`<option value="${i}">${esc(s[0])} / ${esc(s[1])}</option>`).join("")+`<option value="other">リストにない曲（ひとことに記入）</option>`;
+  window.fillReqSongs=()=>{$("#rSong").innerHTML=`<option value="" disabled selected>曲を選ぶ</option>`+SITE.songs.map((s,i)=>`<option value="${i}">${esc(s[0])} / ${esc(s[1])}</option>`).join("")+`<option value="other">リストにない曲（ひとことに記入）</option>`};fillReqSongs();
   const renderSent=()=>{const l=ls.get("mk_req",[]);$("#sent").innerHTML=l.slice(-3).reverse().map(r=>`<li>♪ ${esc(r.song)} <span style="opacity:.6">— ${esc(r.name)}</span></li>`).join("")};
   $("#reqForm").addEventListener("submit",e=>{e.preventDefault();const v=$("#rSong").value,song=v==="other"?"（リスト外）":SITE.songs[v][0];const l=ls.get("mk_req",[]);l.push({name:$("#rName").value,song,msg:$("#rMsg").value,at:Date.now()});ls.set("mk_req",l);e.target.reset();renderSent();toast("リクエストを送りました")});
   renderSent();
