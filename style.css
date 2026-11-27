@@ -632,3 +632,5 @@ footer details.credits .credit{margin-top:6px;opacity:.65}
 @media(max-width:820px){.hero{grid-template-columns:minmax(0,1fr)}.h-text,.h-cta{width:100%;min-width:0}.h-text .en{margin-right:-.7em}.h-text .roles{letter-spacing:.3em;margin-right:-.3em}}
 .h-text .roles{background:linear-gradient(90deg,transparent,rgba(167,126,232,.16) 22%,rgba(167,126,232,.16) 78%,transparent)!important}
 .h-text>*,.h-cta{animation-fill-mode:backwards}
+.h-text .roles{background:none!important;padding:0!important}
+.h-text .lead{text-shadow:0 0 14px rgba(167,126,232,.45)!important}
