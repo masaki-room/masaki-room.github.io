@@ -598,3 +598,4 @@ p,li,dd,dt,span,small,.lead,.slip .m,.sub,.news span,.mtile span,.t,.sl-note{wor
 .news li>span:last-child{line-height:1.8}
 html,body{overflow-x:hidden}
 .ph{overflow:hidden;padding-bottom:12px}
+.sl-song em.mk-signature{background:#d9c8f5;color:#1a1230}

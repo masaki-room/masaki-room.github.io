@@ -121,7 +121,7 @@ H("#linkList",SITE.links.map(l=>`<a class="lk-card" href="${esc(l[2])}" target="
 document.querySelectorAll(".songsLink").forEach(a=>{a.href=SITE.songsUrl;a.target="_blank";a.rel="noopener"});
 /* song list (UTAEMO data, native) */
 function songRow(c){c=(c||"").normalize("NFD")[0]||"";const R=[["あ","あいうえお"],["か","かきくけこ"],["さ","さしすせそ"],["た","たちつてと"],["な","なにぬねの"],["は","はひふへほ"],["ま","まみむめも"],["や","やゆよ"],["ら","らりるれろ"],["わ","わをん"]];for(const r of R)if(r[1].includes(c))return r[0];return "他"}
-const MARK={favorite:"FAVORITE",learning:"練習中",ohako:"十八番"};
+const MARK={favorite:"FAVORITE",learning:"練習中",ohako:"十八番",signature:"十八番"};
 function initSongs(D){
   const songs=D.songs.slice().sort((x,y)=>x.y.localeCompare(y.y,"ja")||x.ty.localeCompare(y.ty,"ja"));
   SITE.songs=songs.map(s=>[s.t,s.a,""]);
@@ -144,7 +144,26 @@ function initSongs(D){
     draw();
   }
 }
-if(window.SONGDATA)initSongs(window.SONGDATA);
+/* UTAEMO「HPに反映する」連携（あんて｡HPと同じ方式）: 公開・読み取り専用フィード。失敗時は songs-data.js を表示 */
+const UT_FEED="https://utaeru-api.manabit.workers.dev/api/hp/masaki-hp/songs",UT_KEY="mk_utaemo";
+function utMap(j){
+  if(!j||j.schemaVersion!==1||!Array.isArray(j.songs))return null;
+  const P=["signature","favorite","learning"];
+  const songs=j.songs.filter(x=>x&&typeof x.t==="string"&&x.t).map(x=>({t:x.t,a:x.a||"",y:x.y||x.a||"",ty:x.ty||x.t,m:(Array.isArray(x.m)&&P.find(k=>x.m.includes(k)))||""}));
+  return {updatedAt:String(j.publishedAt||"").slice(0,10)||(window.SONGDATA||{}).updatedAt,credit:(window.SONGDATA||{}).credit,songs};
+}
+function startSongs(){
+  const fallback=()=>{let c=null;try{c=utMap(JSON.parse(localStorage.getItem(UT_KEY)||"null"))}catch(e){}return c||window.SONGDATA};
+  if(!$("#slL")){if(window.SONGDATA)initSongs(window.SONGDATA);return}
+  const ctl=window.AbortController?new AbortController():null,tm=ctl?setTimeout(()=>ctl.abort(),8000):0;
+  fetch(UT_FEED,{cache:"no-cache",credentials:"omit",signal:ctl?ctl.signal:undefined}).then(r=>{clearTimeout(tm);
+    if(r.status===404){try{localStorage.removeItem(UT_KEY)}catch(e){}return null}
+    if(!r.ok)throw 0;return r.json()}).then(j=>{
+    if(j===null)return window.SONGDATA;
+    const m=utMap(j);if(!m)throw 0;try{localStorage.setItem(UT_KEY,JSON.stringify(j))}catch(e){}return m
+  }).catch(()=>{clearTimeout(tm);return fallback()}).then(D=>{if(D)initSongs(D)});
+}
+startSongs();
 
 /* request */
 if($("#reqForm")){
