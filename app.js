@@ -3,8 +3,8 @@
    ========================================================= */
 const SITE = {
   name: "真咲",
-  catch: "好きな歌で、つながる。",
-  catch2: "それが、うちの生きる理由。",
+  catch: "",
+  catch2: "",
   ctaText: "配信を見にいく",
   season: "winter",           // "none" / "winter"(雪) ※季節・イベント装飾の切り替え
   watchUrl: "https://www.mirrativ.com/user/158657695",
@@ -109,7 +109,7 @@ const cur=(location.pathname.split("/").pop()||"index.html");
 
 /* ===== page parts ===== */
 const H=(sel,html)=>{const e=$(sel);if(e)e.innerHTML=html};
-if($("#h-name")){$("#h-name").textContent=SITE.name;$(".hero .lead").innerHTML=esc(SITE.catch)+"<br>"+esc(SITE.catch2);const a=$("#h-cta");a.href=SITE.watchUrl;a.target="_blank";a.rel="noopener";a.textContent=SITE.ctaText}
+if($("#h-name")){$("#h-name").textContent=SITE.name;{const L=$(".hero .lead");if(SITE.catch||SITE.catch2)L.innerHTML=esc(SITE.catch)+"<br>"+esc(SITE.catch2);else L.remove()}const a=$("#h-cta");a.href=SITE.watchUrl;a.target="_blank";a.rel="noopener";a.textContent=SITE.ctaText}
 H("#newsList",SITE.news.map(n=>`<li><time>${esc(n[0])}</time><span class="tag">${esc(n[1])}</span><span>${esc(n[2])}</span></li>`).join(""));
 
 const en=["MON","TUE","WED","THU","FRI","SAT","SUN"];
