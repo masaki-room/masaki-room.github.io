@@ -69,7 +69,7 @@ const cur=(location.pathname.split("/").pop()||"index.html");
 (function(){
   document.body.insertAdjacentHTML("afterbegin",
    `<canvas id="stars"></canvas><div id="fx"></div>
-    <nav><a class="logo" href="index.html">MASAKI</a>
+    <nav><a class="logo" href="index.html"><img src="img/logo.png" alt="真咲 MASAKI OFFICIAL"></a>
       <ul>${PAGES.slice(1).map(p=>`<li><a href="${p[0]}" class="${p[0]===cur?'cur':''}">${p[1]}</a></li>`).join("")}</ul>
       <button class="burger" id="burger" aria-label="menu"><i></i></button></nav>
     <div class="mmenu" id="mmenu">${PAGES.map(p=>`<a href="${p[0]}">${p[1]}<small>${p[2]}</small></a>`).join("")}</div>

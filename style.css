@@ -486,3 +486,8 @@ section{max-width:980px}
 .h-chara::after{display:none}
 .h-chara::before{border-radius:50%;width:min(60%,420px);aspect-ratio:auto;height:86%;bottom:4%;background:radial-gradient(ellipse at 50% 55%,rgba(167,126,232,.38),rgba(167,126,232,.10) 50%,transparent 72%);filter:blur(14px)}
 body.mono .h-chara::before{background:radial-gradient(ellipse at 50% 55%,rgba(255,255,255,.26),rgba(255,255,255,.06) 50%,transparent 72%)}
+nav .logo{padding-left:0;line-height:0}
+nav .logo::before{display:none}
+nav .logo img{height:34px;width:auto;display:block;filter:drop-shadow(0 0 10px rgba(167,126,232,.35))}
+body.mono nav .logo img{filter:grayscale(1)}
+nav .logo img{height:46px}@media(max-width:720px){nav .logo img{height:40px}}
