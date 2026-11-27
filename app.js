@@ -81,16 +81,27 @@ const cur=(location.pathname.split("/").pop()||"index.html");
   document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><div class="credit">Site by イロハミント（湊音ヒロ）</div><div class="credit" style="opacity:.55">素材：蝶のイラスト／チコデザ</div></footer>`);
 })();
 
-/* ===== opening (premium) ===== */
+/* ===== opening (premium v3) ===== */
 (function(){
   if(cur!=="index.html"&&cur!=="")return;
   let seen=false;try{seen=sessionStorage.getItem("mk_op")}catch(e){}
   if(seen)return;
-  const o=document.createElement("div");o.id="opening";
-  o.innerHTML=`<div class="ob"><img src="img/butterfly.webp" alt=""></div><div class="on">真咲</div><div class="os">MASAKI OFFICIAL SITE</div><div class="ot">TAP TO ENTER</div>`;
+  document.body.classList.add("op-wait");
+  const o=document.createElement("div");o.id="op3";
+  o.innerHTML=`<i class="c c1"></i><i class="c c2"></i><i class="flash"></i>
+  <div class="oc"><div class="olg"><img src="img/logo.png" alt=""></div>
+  <div class="onum"><b id="opn">000</b><span>%</span></div><div class="obar"><i id="opb"></i></div>
+  <div class="otap">TAP TO ENTER</div></div><div class="ocorner tl"></div><div class="ocorner br"></div>`;
   document.body.appendChild(o);document.body.style.overflow="hidden";
-  const close=()=>{o.classList.add("gone");document.body.style.overflow="";try{sessionStorage.setItem("mk_op","1")}catch(e){}setTimeout(()=>o.remove(),1400)};
-  o.addEventListener("click",close);setTimeout(close,6000);
+  const n=$("#opn"),bar=$("#opb"),lg=o.querySelector(".olg img");
+  let done=false,t0=performance.now(),D=2600,ready=false;
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  (function step(now){const p=Math.min((now-t0)/D,1),v=Math.round(ease(p)*100);n.textContent=String(v).padStart(3,"0");bar.style.width=v+"%";lg.style.clipPath=`inset(0 ${100-v}% 0 0)`;
+    if(p<1)requestAnimationFrame(step);else{ready=true;o.classList.add("ready")}})(t0);
+  const close=()=>{if(done||!ready)return;done=true;o.classList.add("open");try{sessionStorage.setItem("mk_op","1")}catch(e){}
+    setTimeout(()=>{document.body.classList.remove("op-wait");document.body.style.overflow=""},650);setTimeout(()=>o.remove(),1800)};
+  o.addEventListener("click",close);
+  setTimeout(()=>{ready=true;close()},9000);
 })();
 
 /* ===== page parts ===== */
