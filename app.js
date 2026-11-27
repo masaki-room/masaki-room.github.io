@@ -130,10 +130,14 @@ function initSongs(D){
     const arts=new Set(songs.map(s=>s.a));
     $("#slN").textContent=songs.length;$("#slA").textContent=arts.size;
     $("#slU").textContent="UPDATED "+String(D.updatedAt).slice(0,10).replace(/-/g,".");
-    const rows=["全",...["あ","か","さ","た","な","は","ま","や","ら","わ","他"].filter(r=>songs.some(s=>songRow(s.y)===r))];
-    $("#slC").innerHTML=rows.map(r=>`<button type="button" data-r="${r}" class="${r==="全"?"on":""}">${r==="全"?"ALL":r}</button>`).join("");
+    const rk=s=>songRow(mode==="t"?s.ty:s.y);
+    const buildChips=()=>{
+      const rows=["全",...["あ","か","さ","た","な","は","ま","や","ら","わ","他"].filter(r=>songs.some(s=>rk(s)===r))];
+      if(!rows.includes(row))row="全";
+      $("#slC").innerHTML=rows.map(r=>`<button type="button" data-r="${r}" class="${r===row?"on":""}">${r==="全"?"ALL":r}</button>`).join("")};
+    buildChips();
     const draw=(only)=>{
-      let L=songs.filter(s=>(row==="全"||songRow(s.y)===row)&&(!q||(mode==="t"?s.t+s.ty:mode==="a"?s.a+s.y:s.t+s.a+s.ty+s.y).toLowerCase().includes(q)));
+      let L=songs.filter(s=>(row==="全"||rk(s)===row)&&(!q||(mode==="t"?s.t+s.ty:mode==="a"?s.a+s.y:s.t+s.a+s.ty+s.y).toLowerCase().includes(q)));
       if(only)L=[only];
       const x=$("#slX");if(x)x.hidden=!only;
       const g={};L.forEach(s=>(g[s.a]=g[s.a]||[]).push(s));
@@ -142,8 +146,8 @@ function initSongs(D){
     if(!$("#slX")){const x=document.createElement("div");x.id="slX";x.hidden=true;x.innerHTML='<span>RANDOM PICK</span><button type="button">解除して一覧に戻る ✕</button>';$("#slL").before(x);x.querySelector("button").addEventListener("click",()=>draw())}
     $("#slC").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;row=b.dataset.r;[...$("#slC").children].forEach(x=>x.classList.toggle("on",x===b));draw()});
     $("#slQ").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
-    $("#slR").addEventListener("click",()=>{const base=songs.filter(s=>(row==="全"||songRow(s.y)===row));if(base.length){draw(base[Math.floor(Math.random()*base.length)])}});
-    $("#slM").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.k;[...$("#slM").querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x===b));$("#slQ").placeholder=mode==="t"?"曲名で探す":mode==="a"?"アーティストで探す":"曲名・アーティストで探す";draw()});
+    $("#slR").addEventListener("click",()=>{const base=songs.filter(s=>(row==="全"||rk(s)===row));if(base.length){draw(base[Math.floor(Math.random()*base.length)])}});
+    $("#slM").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.k;[...$("#slM").querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x===b));buildChips();$("#slQ").placeholder=mode==="t"?"曲名で探す":mode==="a"?"アーティストで探す":"曲名・アーティストで探す";draw()});
     draw();
   }
 }
