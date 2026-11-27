@@ -482,3 +482,7 @@ section{max-width:980px}
 @media(hover:hover) and (min-width:821px){#cg{display:block}}
 .hero>.ticker{position:absolute!important;grid-area:auto}
 @media(min-width:821px){.hero{padding-bottom:104px}}
+/* no moon-like circle: soft vertical aura only */
+.h-chara::after{display:none}
+.h-chara::before{border-radius:50%;width:min(60%,420px);aspect-ratio:auto;height:86%;bottom:4%;background:radial-gradient(ellipse at 50% 55%,rgba(167,126,232,.38),rgba(167,126,232,.10) 50%,transparent 72%);filter:blur(14px)}
+body.mono .h-chara::before{background:radial-gradient(ellipse at 50% 55%,rgba(255,255,255,.26),rgba(255,255,255,.06) 50%,transparent 72%)}
