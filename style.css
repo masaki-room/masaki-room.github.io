@@ -603,10 +603,10 @@ html,body{overflow-x:hidden}
 #op3{--p:0}
 #op3 .c{background:none}
 #op3 .sk{position:absolute;inset:0;display:block;background:radial-gradient(circle at 50% 45%,#1e1535,#07050d 72%)}
-#op3 .sk::before{content:"";position:absolute;inset:0;opacity:calc(1 - var(--p)*1.15);background:
- radial-gradient(ellipse 90% 45% at 50% 108%,#ffb27a 0%,rgba(255,150,110,.75) 30%,transparent 70%),
- linear-gradient(180deg,#3b2a6e 0%,#8a4f9e 42%,#e0707f 74%,#ff9d6c 100%)}
-#op3 .sk::after{content:"";position:absolute;inset:0;opacity:calc((var(--p) - .35)*1.6);
+#op3 .sk::before{content:"";position:absolute;inset:0;opacity:calc(.7 - var(--p)*.85);background:
+ radial-gradient(ellipse 90% 32% at 50% 110%,#e8845f 0%,rgba(220,110,120,.6) 35%,transparent 72%),
+ linear-gradient(180deg,#171038 0%,#3a2670 45%,#7c4590 78%,#b9577f 100%)}
+#op3 .sk::after{content:"";position:absolute;inset:0;opacity:calc(.3 + var(--p)*1.2);
  background-image:radial-gradient(1.5px 1.5px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 28% 42%,#d9c8f5,transparent),radial-gradient(1.5px 1.5px at 44% 12%,#fff,transparent),radial-gradient(1px 1px at 63% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 16%,#d9c8f5,transparent),radial-gradient(1px 1px at 90% 38%,#fff,transparent),radial-gradient(1px 1px at 7% 60%,#fff,transparent),radial-gradient(1.5px 1.5px at 35% 70%,#d9c8f5,transparent),radial-gradient(1px 1px at 55% 56%,#fff,transparent),radial-gradient(1.5px 1.5px at 85% 72%,#fff,transparent),radial-gradient(1px 1px at 20% 88%,#fff,transparent),radial-gradient(1px 1px at 70% 90%,#d9c8f5,transparent)}
 footer details.credits{margin-top:12px}
 footer details.credits summary{display:inline-flex;align-items:center;gap:8px;cursor:pointer;list-style:none;font-family:var(--disp);font-size:11px;letter-spacing:.3em;opacity:.7;padding:6px 4px}
