@@ -170,18 +170,9 @@ if($("#watch2")){const a=$("#watch2");a.href=SITE.watchUrl;a.target="_blank";a.r
   try{if(localStorage.getItem("mk_mono")==="1")document.body.classList.add("mono")}catch(e){}
   const mb=document.createElement("button");mb.className="modebtn";
   const lab=()=>{mb.textContent=document.body.classList.contains("mono")?"MODE : MONO":"MODE : VIOLET";};
-  mb.addEventListener("click",()=>{document.body.classList.toggle("mono");try{localStorage.setItem("mk_mono",document.body.classList.contains("mono")?"1":"0")}catch(e){};lab();kick()});
+  mb.addEventListener("click",()=>{document.body.classList.toggle("mono");try{localStorage.setItem("mk_mono",document.body.classList.contains("mono")?"1":"0")}catch(e){};lab()});
   document.body.appendChild(mb);lab();
-  // glitch text targets
-  const gts=[...document.querySelectorAll(".h-text h1,.ph h1")];
-  gts.forEach(e=>{e.classList.add("gt");e.dataset.t=e.textContent});
-  // character clones
-  const gl=$(".gl");
-  if(gl){const im=gl.querySelector("img");["g1","g2"].forEach(c=>{const x=im.cloneNode();x.className="g "+c;x.alt="";x.setAttribute("aria-hidden","true");gl.appendChild(x)});
-    gl.addEventListener("pointerdown",kick);gl.addEventListener("mouseenter",kick)}
-  function kick(){const t=[...gts];if(gl)t.push(gl);t.forEach(e=>{e.classList.remove("go");void e.offsetWidth;e.classList.add("go")})}
-  setTimeout(kick,900);
-  setInterval(()=>{if(document.visibilityState==="visible")kick()},9000);
+  function kick(){}
   // cursor glow
   const cg=document.createElement("div");cg.id="cg";document.body.appendChild(cg);
   addEventListener("pointermove",e=>{cg.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});

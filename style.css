@@ -491,3 +491,5 @@ nav .logo::before{display:none}
 nav .logo img{height:34px;width:auto;display:block;filter:drop-shadow(0 0 10px rgba(167,126,232,.35))}
 body.mono nav .logo img{filter:grayscale(1)}
 nav .logo img{height:46px}@media(max-width:720px){nav .logo img{height:40px}}
+/* no glitch / noise */
+.gt::before,.gt::after,.gl img.g{display:none!important}
