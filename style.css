@@ -629,3 +629,4 @@ footer details.credits .credit{margin-top:6px;opacity:.65}
 .sl-cm:hover{border-color:var(--purple);color:#fff}
 .sl-cm.done{background:var(--purple);border-color:var(--purple);color:#1a1230}
 .sl-cm{white-space:nowrap}
+@media(max-width:820px){.hero{grid-template-columns:minmax(0,1fr)}.h-text,.h-cta{width:100%;min-width:0}.h-text .en{margin-right:-.7em}.h-text .roles{letter-spacing:.3em;margin-right:-.3em}}
