@@ -141,12 +141,17 @@ function initSongs(D){
       if(only)L=[only];
       const x=$("#slX");if(x)x.hidden=!only;
       const g={};L.forEach(s=>(g[s.a]=g[s.a]||[]).push(s));
-      $("#slL").innerHTML=L.length?Object.keys(g).map(a=>`<li class="sl-art"><div class="sl-an">${esc(a)}<small>${g[a].length}曲</small></div>${g[a].map(s=>`<div class="sl-song"><span>${esc(s.t)}</span>${s.m?`<em class="mk-${s.m}">${MARK[s.m]||""}</em>`:""}</div>`).join("")}</li>`).join(""):`<li class="sl-none">見つかりませんでした。リクエスト欄からどうぞ。</li>`;
+      $("#slL").innerHTML=L.length?Object.keys(g).map(a=>`<li class="sl-art"><div class="sl-an">${esc(a)}<small>${g[a].length}曲</small></div>${g[a].map(s=>`<div class="sl-song"><span>${esc(s.t)}</span>${s.m?`<em class="mk-${s.m}">${MARK[s.m]||""}</em>`:""}<button type="button" class="sl-cm" data-t="${esc(s.t)}" data-a="${esc(s.a)}" aria-label="コメント用にコピー">コメント用コピー</button></div>`).join("")}</li>`).join(""):`<li class="sl-none">見つかりませんでした。リクエスト欄からどうぞ。</li>`;
     };
     if(!$("#slX")){const x=document.createElement("div");x.id="slX";x.hidden=true;x.innerHTML='<span>RANDOM PICK</span><button type="button">解除して一覧に戻る ✕</button>';$("#slL").before(x);x.querySelector("button").addEventListener("click",()=>draw())}
     $("#slC").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;row=b.dataset.r;[...$("#slC").children].forEach(x=>x.classList.toggle("on",x===b));draw()});
     $("#slQ").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
     $("#slR").addEventListener("click",()=>{const base=songs.filter(s=>(row==="全"||rk(s)===row));if(base.length){draw(base[Math.floor(Math.random()*base.length)])}});
+    $("#slL").addEventListener("click",e=>{const b=e.target.closest(".sl-cm");if(!b)return;
+      const txt="【リクエスト】"+b.dataset.t+"／"+b.dataset.a;
+      const ok=()=>{const o=b.textContent;b.textContent="コピー済み ✓";b.classList.add("done");setTimeout(()=>{b.textContent=o;b.classList.remove("done")},1800)};
+      const fb=()=>{const t=document.createElement("textarea");t.value=txt;t.style.cssText="position:fixed;opacity:0";document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(_){}t.remove();ok()};
+      (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(txt).then(ok,fb):fb())});
     $("#slM").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.k;[...$("#slM").querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x===b));buildChips();$("#slQ").placeholder=mode==="t"?"曲名で探す":mode==="a"?"アーティストで探す":"曲名・アーティストで探す";draw()});
     draw();
   }

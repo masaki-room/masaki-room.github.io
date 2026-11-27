@@ -624,3 +624,8 @@ footer details.credits .credit{margin-top:6px;opacity:.65}
 #slX[hidden]{display:none}
 #slX span{font-family:var(--disp);font-size:11px;letter-spacing:.3em;color:var(--purple)}
 #slX button{background:none;border:0;color:#fff;font:inherit;font-size:12px;letter-spacing:.08em;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.sl-song{flex-wrap:wrap;gap:6px 10px}
+.sl-cm{margin-left:auto;background:none;border:1px solid var(--line);color:var(--lav);font:inherit;font-size:11px;letter-spacing:.06em;padding:5px 10px;cursor:pointer;transition:.25s}
+.sl-cm:hover{border-color:var(--purple);color:#fff}
+.sl-cm.done{background:var(--purple);border-color:var(--purple);color:#1a1230}
+.sl-cm{white-space:nowrap}
