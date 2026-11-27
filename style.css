@@ -615,3 +615,8 @@ footer details.credits summary::after{content:"+";font-size:14px;transition:tran
 footer details.credits[open] summary::after{transform:rotate(45deg)}
 footer details.credits .credit{margin-top:6px;opacity:.65}
 .h-text .roles{border-left:0!important;padding-left:0}
+.sl-mode{display:flex;align-items:center;gap:8px;margin:-4px 0 14px;flex-wrap:wrap}
+.sl-mode span{font-size:11px;letter-spacing:.2em;color:var(--purple);margin-right:4px}
+.sl-mode button{height:30px;padding:0 14px;background:none;border:1px solid var(--line);color:var(--lav);font:inherit;font-size:12px;letter-spacing:.12em;cursor:pointer;transition:.25s}
+.sl-mode button:hover{border-color:var(--purple)}
+.sl-mode button.on{background:var(--purple);color:#1a1230;border-color:var(--purple)}

@@ -126,14 +126,14 @@ function initSongs(D){
   const songs=D.songs.slice().sort((x,y)=>x.y.localeCompare(y.y,"ja")||x.ty.localeCompare(y.ty,"ja"));
   SITE.songs=songs.map(s=>[s.t,s.a,""]);
   if($("#slL")){
-    let row="全",q="";
+    let row="全",q="",mode="all";
     const arts=new Set(songs.map(s=>s.a));
     $("#slN").textContent=songs.length;$("#slA").textContent=arts.size;
     $("#slU").textContent="UPDATED "+String(D.updatedAt).slice(0,10).replace(/-/g,".");
     const rows=["全",...["あ","か","さ","た","な","は","ま","や","ら","わ","他"].filter(r=>songs.some(s=>songRow(s.y)===r))];
     $("#slC").innerHTML=rows.map(r=>`<button type="button" data-r="${r}" class="${r==="全"?"on":""}">${r==="全"?"ALL":r}</button>`).join("");
     const draw=(only)=>{
-      let L=songs.filter(s=>(row==="全"||songRow(s.y)===row)&&(!q||(s.t+s.a+s.ty+s.y).toLowerCase().includes(q)));
+      let L=songs.filter(s=>(row==="全"||songRow(s.y)===row)&&(!q||(mode==="t"?s.t+s.ty:mode==="a"?s.a+s.y:s.t+s.a+s.ty+s.y).toLowerCase().includes(q)));
       if(only)L=[only];
       const g={};L.forEach(s=>(g[s.a]=g[s.a]||[]).push(s));
       $("#slL").innerHTML=L.length?Object.keys(g).map(a=>`<li class="sl-art"><div class="sl-an">${esc(a)}<small>${g[a].length}曲</small></div>${g[a].map(s=>`<div class="sl-song"><span>${esc(s.t)}</span>${s.m?`<em class="mk-${s.m}">${MARK[s.m]||""}</em>`:""}</div>`).join("")}</li>`).join(""):`<li class="sl-none">見つかりませんでした。リクエスト欄からどうぞ。</li>`;
@@ -141,6 +141,7 @@ function initSongs(D){
     $("#slC").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;row=b.dataset.r;[...$("#slC").children].forEach(x=>x.classList.toggle("on",x===b));draw()});
     $("#slQ").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
     $("#slR").addEventListener("click",()=>{const base=songs.filter(s=>(row==="全"||songRow(s.y)===row));if(base.length){draw(base[Math.floor(Math.random()*base.length)])}});
+    $("#slM").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.k;[...$("#slM").querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x===b));$("#slQ").placeholder=mode==="t"?"曲名で探す":mode==="a"?"アーティストで探す":"曲名・アーティストで探す";draw()});
     draw();
   }
 }
