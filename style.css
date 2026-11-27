@@ -536,10 +536,10 @@ nav .logo img{height:46px}@media(max-width:720px){nav .logo img{height:40px}}
 #op3{position:fixed;inset:0;z-index:200;overflow:hidden;cursor:wait;background:transparent}
 #op3.ready{cursor:pointer}
 #op3 .c{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#1e1535,#07050d 72%);transition:transform 1.1s cubic-bezier(.76,0,.2,1)}
-#op3 .c1{clip-path:polygon(0 0,100% 0,100% 50%,0 90%)}
-#op3 .c2{clip-path:polygon(100% 50%,100% 100%,0 100%,0 90%)}
-#op3.open .c1{transform:translate(-105%,-105%)}
-#op3.open .c2{transform:translate(105%,105%)}
+#op3 .c1{clip-path:polygon(0 0,100% 0,100% 90%,0 90%)}
+#op3 .c2{clip-path:polygon(0 90%,100% 90%,100% 100%,0 100%)}
+#op3.open .c1{transform:translateY(-105%)}
+#op3.open .c2{transform:translateY(105%)}
 #op3 .flash{position:absolute;left:50%;top:70%;width:160vmax;height:2px;margin:-1px 0 0 -80vmax;background:linear-gradient(90deg,transparent,#fff 40%,#fff 60%,transparent);box-shadow:0 0 40px 8px rgba(167,126,232,.9);transform:rotate(atan2(1,1));transform:rotate(-38deg) scaleX(0);opacity:0}
 #op3.open .flash{animation:opFlash 1s ease-out both}
 @keyframes opFlash{0%{opacity:1;transform:rotate(-38deg) scaleX(0)}35%{opacity:1;transform:rotate(-38deg) scaleX(1)}100%{opacity:0;transform:rotate(-38deg) scaleX(1.2)}}
@@ -634,3 +634,11 @@ footer details.credits .credit{margin-top:6px;opacity:.65}
 .h-text>*,.h-cta{animation-fill-mode:backwards}
 .h-text .roles{background:none!important;padding:0!important}
 .h-text .lead{text-shadow:0 0 14px rgba(167,126,232,.45)!important}
+
+/* opening open: horizontal light sweep + butterfly burst */
+#op3 .flash{left:0!important;top:90%!important;width:100%!important;margin:-1px 0 0 0!important;transform:scaleX(0)!important;transform-origin:left center;opacity:0}
+#op3.open .flash{animation:opSweep 1s ease-out both!important}
+@keyframes opSweep{0%{opacity:1;transform:scaleX(0)}55%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
+#op3 .bf{position:absolute;left:50%;top:45%;z-index:5;opacity:0;pointer-events:none;color:#d9c8f5;font-size:var(--s);text-shadow:0 0 12px rgba(167,126,232,.9);animation:bfOut 1.7s cubic-bezier(.15,.7,.3,1) var(--d) forwards}
+#op3 img.bf{width:var(--s);height:auto;filter:drop-shadow(0 0 10px rgba(167,126,232,.8))}
+@keyframes bfOut{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(var(--r))}}

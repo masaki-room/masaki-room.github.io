@@ -98,8 +98,11 @@ const cur=(location.pathname.split("/").pop()||"index.html");
   const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
   (function step(now){const p=Math.min((now-t0)/D,1),v=Math.round(ease(p)*100);n.textContent=String(v).padStart(3,"0");bar.style.width=v+"%";o.style.setProperty("--p",(v/100).toFixed(3));lg.style.clipPath=`inset(0 ${100-v}% 0 0)`;
     if(p<1)requestAnimationFrame(step);else{ready=true;o.classList.add("ready")}})(t0);
-  const close=()=>{if(done||!ready)return;done=true;o.classList.add("open");try{sessionStorage.setItem("mk_op","1")}catch(e){}
-    setTimeout(()=>{document.body.classList.remove("op-wait");document.body.style.overflow=""},650);setTimeout(()=>o.remove(),1800)};
+  const close=()=>{if(done||!ready)return;done=true;o.classList.add("open");
+    for(let i=0;i<18;i++){const bt=i%3!==2,e=document.createElement(bt?"img":"span");if(bt)e.src="img/butterfly.webp";else e.textContent=i%2?"♪":"♫";e.className="bf";
+      const ang=Math.random()*Math.PI*2,r=Math.min(innerWidth,innerHeight)*(.3+Math.random()*.55);
+      e.style.cssText=`--s:${bt?20+Math.random()*30:18+Math.random()*16}px;--x:${Math.cos(ang)*r*1.1}px;--y:${Math.sin(ang)*r*1.2-30}px;--r:${(Math.random()-.5)*160}deg;--d:${(Math.random()*.25).toFixed(2)}s`;o.appendChild(e)}try{sessionStorage.setItem("mk_op","1")}catch(e){}
+    setTimeout(()=>{document.body.classList.remove("op-wait");document.body.style.overflow=""},650);setTimeout(()=>o.remove(),2600)};
   o.addEventListener("click",close);
   setTimeout(()=>{ready=true;close()},9000);
 })();
