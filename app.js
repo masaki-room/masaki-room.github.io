@@ -10,16 +10,10 @@ const SITE = {
   watchUrl: "https://www.mirrativ.com/user/158657695",
   news: [
     ["2026.11.25", "INFO", "公式サイトを公開しました。"],
-    ["2026.11.25", "INFO", "歌える曲リストとリクエスト機能を追加しました。"],
-    ["2026.11.24", "LIVE", "今週の配信予定を更新しました。"]
+    ["2026.11.25", "INFO", "歌える曲リストとリクエスト機能を追加しました。"]
   ],
-  // 今週の配信予定: 曜日(0=日〜6=土)  ※サンプル（実際の予定に差し替え）
-  schedule: {
-    1: {time:"22:00〜", title:"雑談配信", place:"Mirrativ"},
-    3: {time:"22:00〜", title:"歌枠", place:"Mirrativ"},
-    5: {time:"21:30〜", title:"歌枠", place:"YouTube"},
-    6: {time:"23:00〜", title:"ゲーム配信", place:"Mirrativ"}
-  },
+  // 配信予定は「HP更新ページ」から追加します（{d:"2026-11-29",t:"22:00〜",ti:"歌枠",p:"Mirrativ"}）
+  schedule: [],
   scheduleNote: "※予定は変更になることがあります。最新情報はXでお知らせします。",
   songsUrl: "https://utalis.github.io/u/masaki06-utamita",
   songs: [ // リクエスト欄の候補（※サンプル。本番は歌える曲リストに合わせて差し替え）
@@ -110,16 +104,34 @@ const cur=(location.pathname.split("/").pop()||"index.html");
 /* ===== page parts ===== */
 const H=(sel,html)=>{const e=$(sel);if(e)e.innerHTML=html};
 if($("#h-name")){$("#h-name").textContent=SITE.name;{const L=$(".hero .lead");if(SITE.catch||SITE.catch2)L.innerHTML=esc(SITE.catch)+"<br>"+esc(SITE.catch2);else L.remove()}const a=$("#h-cta");a.href=SITE.watchUrl;a.target="_blank";a.rel="noopener";a.textContent=SITE.ctaText}
-H("#newsList",SITE.news.map(n=>`<li><time>${esc(n[0])}</time><span class="tag">${esc(n[1])}</span><span>${esc(n[2])}</span></li>`).join(""));
-
 const en=["MON","TUE","WED","THU","FRI","SAT","SUN"];
-function weekDays(){const now=new Date(),dow=(now.getDay()+6)%7;const mon=new Date(now);mon.setDate(now.getDate()-dow);mon.setHours(0,0,0,0);const out=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);out.push({d,i,s:SITE.schedule[d.getDay()],isToday:i===dow,past:i<dow})}return out}
-H("#week",weekDays().map(({d,i,s,isToday})=>`<div class="day ${isToday?'today':''} ${s?'':'off'}"><div class="d">${d.getMonth()+1}/${d.getDate()}<small>${en[i]}</small></div><div class="t">${s?`<b>${esc(s.title)}</b><span>${esc(s.time)} ／ ${esc(s.place)}</span>`:`<span>お休み</span>`}</div><div>${isToday&&s?'<span class="badge live">TODAY</span>':s?'<span class="badge">LIVE</span>':''}</div></div>`).join(""));
-if($("#weekRange")){const w=weekDays();const a=w[0].d,b=w[6].d;$("#weekRange").innerHTML=`<b>${a.getMonth()+1}/${a.getDate()}</b> — <b>${b.getMonth()+1}/${b.getDate()}</b>`}
-if($("#weekNote"))$("#weekNote").textContent=SITE.scheduleNote;
-if($("#nextLive")){const nx=weekDays().find(x=>x.s&&!x.past);$("#nextLive").innerHTML=nx?`<div class="big"><small>NEXT LIVE</small>${nx.d.getMonth()+1}/${nx.d.getDate()} ${en[nx.i]} ${esc(nx.s.time)}</div><div>${esc(nx.s.title)}<br><span style="opacity:.7;font-size:13px">${esc(nx.s.place)}</span></div><a class="cta sm" href="${esc(SITE.watchUrl)}" target="_blank" rel="noopener">配信へ</a>`:`<div>今週の配信予定はありません。Xでお知らせします。</div>`}
-
-H("#p-dl",SITE.profile.map(i=>`<div class="row"><dt>${esc(i[0])}</dt><dd>${esc(i[1])}</dd></div>`).join(""));
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function weekDays(){const now=new Date(),dow=(now.getDay()+6)%7;const mon=new Date(now);mon.setDate(now.getDate()-dow);mon.setHours(0,0,0,0);const out=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);const k=ymd(d);out.push({d,i,list:(SITE.schedule||[]).filter(x=>x.d===k).sort((p,q)=>String(p.t).localeCompare(String(q.t))),isToday:i===dow,past:i<dow})}return out}
+function renderDyn(){
+  const news=(SITE.news||[]).slice().sort((x,y)=>String(y[0]).localeCompare(String(x[0])));
+  H("#newsList",news.length?news.map(n=>`<li><time>${esc(n[0])}</time><span class="tag">${esc(n[1])}</span><span>${esc(n[2])}</span></li>`).join(""):"<li><span>お知らせはまだありません。</span></li>");
+  H("#week",weekDays().map(({d,i,list,isToday})=>`<div class="day ${isToday?'today':''} ${list.length?'':'off'}"><div class="d">${d.getMonth()+1}/${d.getDate()}<small>${en[i]}</small></div><div class="t">${list.length?list.map(s=>`<b>${esc(s.ti)}</b><span>${esc(s.t)} ／ ${esc(s.p)}</span>`).join(""):`<span>予定なし</span>`}</div><div>${isToday&&list.length?'<span class="badge live">TODAY</span>':list.length?'<span class="badge">LIVE</span>':''}</div></div>`).join(""));
+  if($("#weekRange")){const w=weekDays();const a=w[0].d,b=w[6].d;$("#weekRange").innerHTML=`<b>${a.getMonth()+1}/${a.getDate()}</b> — <b>${b.getMonth()+1}/${b.getDate()}</b>`}
+  if($("#weekNote"))$("#weekNote").textContent=SITE.scheduleNote;
+  if($("#nextLive")){const t=ymd(new Date());const up=(SITE.schedule||[]).filter(x=>x.d>=t).sort((p,q)=>(p.d+p.t).localeCompare(q.d+q.t))[0];
+    if(up){const d=new Date(up.d+"T00:00:00");$("#nextLive").innerHTML=`<div class="big"><small>NEXT LIVE</small>${d.getMonth()+1}/${d.getDate()} ${en[(d.getDay()+6)%7]} ${esc(up.t)}</div><div>${esc(up.ti)}<br><span style="opacity:.7;font-size:13px">${esc(up.p)}</span></div><a class="cta sm" href="${esc(SITE.watchUrl)}" target="_blank" rel="noopener">配信へ</a>`}
+    else $("#nextLive").innerHTML=`<div>配信予定は決まり次第お知らせします。Xもチェックしてね。</div>`}
+  H("#p-dl",SITE.profile.map(i=>`<div class="row"><dt>${esc(i[0])}</dt><dd>${esc(i[1])}</dd></div>`).join(""));
+  if(SITE.photo){const im=document.querySelector(".pcard img");if(im)im.src=SITE.photo}
+}
+renderDyn();
+/* ===== 「HP更新ページ」で保存した内容を読み込む（Supabase・公開読み取り） ===== */
+const SB_URL="https://uglxilcwbgqoofnzngux.supabase.co/rest/v1/rpc/",SB_KEY="sb_publishable_R83zSq90hslRd5jl04sIPg_hZlLxfRC";
+function sbCall(fn,args){return fetch(SB_URL+fn,{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(args||{})}).then(r=>{if(!r.ok)throw new Error(fn);return r.json()})}
+function applyPub(j){if(!j||typeof j!=="object")return;
+  if(Array.isArray(j.news))SITE.news=j.news;
+  if(Array.isArray(j.schedule))SITE.schedule=j.schedule;
+  if(typeof j.schedule_note==="string"&&j.schedule_note)SITE.scheduleNote=j.schedule_note;
+  if(Array.isArray(j.profile)&&j.profile.length)SITE.profile=j.profile;
+  if(typeof j.photo==="string"&&j.photo.startsWith("data:image/"))SITE.photo=j.photo;
+  renderDyn()}
+(function(){let c=null;try{c=JSON.parse(localStorage.getItem("mk_pub")||"null")}catch(e){}applyPub(c);
+  sbCall("masaki_public").then(j=>{try{localStorage.setItem("mk_pub",JSON.stringify(j))}catch(e){}applyPub(j)}).catch(()=>{})})();
 H("#linkList",SITE.links.map(l=>`<a class="lk-card" href="${esc(l[2])}"${/^https?:/.test(l[2])?' target="_blank" rel="noopener"':""}><b>${esc(l[0])}</b><span>${esc(l[1])}</span></a>`).join(""));
 document.querySelectorAll(".songsLink").forEach(a=>{a.href=SITE.songsUrl;a.target="_blank";a.rel="noopener"});
 /* song list (UTAEMO data, native) */
@@ -184,7 +196,9 @@ startSongs();
 if($("#reqForm")){
   window.fillReqSongs=()=>{$("#rSong").innerHTML=`<option value="" disabled selected>曲を選ぶ</option>`+SITE.songs.map((s,i)=>`<option value="${i}">${esc(s[0])} / ${esc(s[1])}</option>`).join("")+`<option value="other">リストにない曲（ひとことに記入）</option>`};fillReqSongs();
   const renderSent=()=>{const l=ls.get("mk_req",[]);$("#sent").innerHTML=l.slice(-3).reverse().map(r=>`<li>♪ ${esc(r.song)} <span style="opacity:.6">— ${esc(r.name)}</span></li>`).join("")};
-  $("#reqForm").addEventListener("submit",e=>{e.preventDefault();const v=$("#rSong").value,song=v==="other"?"（リスト外）":SITE.songs[v][0];const l=ls.get("mk_req",[]);l.push({name:$("#rName").value,song,msg:$("#rMsg").value,at:Date.now()});ls.set("mk_req",l);e.target.reset();renderSent();toast("リクエストを送りました")});
+  $("#reqForm").addEventListener("submit",e=>{e.preventDefault();const f=e.target,btn=f.querySelector("button[type=submit]");const v=$("#rSong").value,song=v==="other"?"（リスト外）":SITE.songs[v][0]+" / "+SITE.songs[v][1];
+    const name=$("#rName").value.trim(),msg=$("#rMsg").value.trim();if(btn)btn.disabled=true;
+    sbCall("masaki_req_add",{n:name,s:song,m:msg}).then(()=>{const l=ls.get("mk_req",[]);l.push({name,song:song.split(" / ")[0],at:Date.now()});ls.set("mk_req",l);f.reset();renderSent();toast("リクエストを送りました")}).catch(()=>toast("送信できませんでした。少し待ってもう一度どうぞ")).finally(()=>{if(btn)btn.disabled=false})});
   renderSent();
 }
 
