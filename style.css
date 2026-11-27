@@ -642,3 +642,18 @@ footer details.credits .credit{margin-top:6px;opacity:.65}
 #op3 .bf{position:absolute;left:50%;top:45%;z-index:5;opacity:0;pointer-events:none;color:#d9c8f5;font-size:var(--s);text-shadow:0 0 12px rgba(167,126,232,.9);animation:bfOut 1.7s cubic-bezier(.15,.7,.3,1) var(--d) forwards}
 #op3 img.bf{width:var(--s);height:auto;filter:drop-shadow(0 0 10px rgba(167,126,232,.8))}
 @keyframes bfOut{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(var(--r))}}
+
+/* opening open v2: sliced blinds + flash + logo burst-out */
+#op3 .c.st{clip-path:none;top:calc(var(--i)*100%/9);bottom:auto;height:calc(100%/9 + 1px);overflow:hidden;transition:transform .85s cubic-bezier(.7,0,.2,1) calc(var(--i)*.055s)}
+#op3 .c.st .sk{top:calc(var(--i)*-100svh/9);height:100svh;bottom:auto}
+#op3.open .c.st:nth-child(odd){transform:translateX(-105%)}
+#op3.open .c.st:nth-child(even){transform:translateX(105%)}
+#op3 .c1,#op3 .c2{display:none}
+#op3 .flash{display:none!important}
+#op3 .fl{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#fff,rgba(217,200,245,.6) 35%,transparent 70%);opacity:0;pointer-events:none;z-index:4}
+#op3.open .fl{animation:opFl .7s ease-out both}
+@keyframes opFl{0%{opacity:0}18%{opacity:.85}100%{opacity:0}}
+#op3.open .oc{opacity:0;transform:scale(1.5);filter:blur(6px);transition:opacity .55s,transform .7s cubic-bezier(.2,.7,.2,1),filter .6s}
+#op3 .c.st{left:0;width:100%;right:auto;aspect-ratio:auto}
+#op3 .fl{background:#e9defa!important}
+@keyframes opFl{0%{opacity:0}15%{opacity:.55}100%{opacity:0}}

@@ -82,7 +82,7 @@ const cur=(location.pathname.split("/").pop()||"index.html");
   if(seen)return;
   document.body.classList.add("op-wait");
   const o=document.createElement("div");o.id="op3";
-  o.innerHTML=`<i class="c c1"><b class="sk"></b></i><i class="c c2"><b class="sk"></b></i><i class="flash"></i>
+  o.innerHTML=`${Array.from({length:9},(_,i)=>`<i class="c st" style="--i:${i}"><b class="sk"></b></i>`).join("")}<i class="flash"></i><i class="fl"></i>
   <div class="oc"><div class="olg"><img src="img/logo.png" alt=""></div>
   <div class="onum"><b id="opn">000</b><span>%</span></div><div class="obar"><i id="opb"></i></div>
   <div class="otap">TAP TO ENTER</div></div><div class="ocorner tl"></div><div class="ocorner br"></div>`;
