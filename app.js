@@ -72,9 +72,12 @@ const cur=(location.pathname.split("/").pop()||"index.html");
     <nav><a class="logo" href="index.html"><img src="img/logo.png" alt="真咲 MASAKI OFFICIAL"></a>
       <ul>${PAGES.slice(1).map(p=>`<li><a href="${p[0]}" class="${p[0]===cur?'cur':''}">${p[1]}</a></li>`).join("")}</ul>
       <button class="burger" id="burger" aria-label="menu"><i></i></button></nav>
-    <div class="mmenu" id="mmenu">${PAGES.map(p=>`<a href="${p[0]}">${p[1]}<small>${p[2]}</small></a>`).join("")}</div>
+    <div class="mmenu" id="mmenu"><button class="mclose" id="mclose" aria-label="閉じる"><i></i></button>${PAGES.map(p=>`<a href="${p[0]}">${p[1]}<small>${p[2]}</small></a>`).join("")}</div>
     <div class="toast" id="toast"></div>`);
+  const mm=()=>{$("#burger").classList.remove("open");$("#mmenu").classList.remove("open")};
   $("#burger").onclick=()=>{$("#burger").classList.toggle("open");$("#mmenu").classList.toggle("open")};
+  $("#mclose").onclick=mm;$("#mmenu").addEventListener("click",e=>{if(e.target.id==="mmenu"||e.target.closest("a"))mm()});
+  addEventListener("keydown",e=>{if(e.key==="Escape")mm()});
   document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><div class="credit">Site by イロハミント（湊音ヒロ）</div><div class="credit" style="opacity:.55">素材：蝶のイラスト／チコデザ</div></footer>`);
 })();
 

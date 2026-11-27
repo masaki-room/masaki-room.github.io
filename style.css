@@ -493,3 +493,7 @@ body.mono nav .logo img{filter:grayscale(1)}
 nav .logo img{height:46px}@media(max-width:720px){nav .logo img{height:40px}}
 /* no glitch / noise */
 .gt::before,.gt::after,.gl img.g{display:none!important}
+.mclose{position:absolute;top:14px;right:22px;width:46px;height:46px;border:1px solid var(--line);background:rgba(23,18,38,.8);cursor:pointer;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.mclose i,.mclose i::before{position:absolute;left:12px;right:12px;top:22px;height:1px;background:#fff;content:"";transform:rotate(45deg)}
+.mclose i::before{left:0;right:0;top:0;transform:rotate(-90deg)}
+.mclose:hover{background:var(--purple)}
