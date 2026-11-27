@@ -31,7 +31,7 @@ const SITE = {
     ["X", "@masaki_0624513", "https://x.com/masaki_0624513"],
     ["YouTube", "チャンネル", "https://www.youtube.com/channel/UCgAyIApoO42E0QedKv5QtaA"],
     ["Mirrativ", "配信ページ", "https://www.mirrativ.com/user/158657695"],
-    ["うたみた", "歌える曲リスト", "https://utalis.github.io/u/masaki06-utamita"]
+    ["歌える曲リスト", "歌える曲の一覧・リクエスト", "songs.html"]
   ],
   profile: [
     ["名前・読み方", "真咲（まさき）"],
@@ -117,7 +117,7 @@ if($("#weekNote"))$("#weekNote").textContent=SITE.scheduleNote;
 if($("#nextLive")){const nx=weekDays().find(x=>x.s&&!x.past);$("#nextLive").innerHTML=nx?`<div class="big"><small>NEXT LIVE</small>${nx.d.getMonth()+1}/${nx.d.getDate()} ${en[nx.i]} ${esc(nx.s.time)}</div><div>${esc(nx.s.title)}<br><span style="opacity:.7;font-size:13px">${esc(nx.s.place)}</span></div><a class="cta sm" href="${esc(SITE.watchUrl)}" target="_blank" rel="noopener">配信へ</a>`:`<div>今週の配信予定はありません。Xでお知らせします。</div>`}
 
 H("#p-dl",SITE.profile.map(i=>`<div class="row"><dt>${esc(i[0])}</dt><dd>${esc(i[1])}</dd></div>`).join(""));
-H("#linkList",SITE.links.map(l=>`<a class="lk-card" href="${esc(l[2])}" target="_blank" rel="noopener"><b>${esc(l[0])}</b><span>${esc(l[1])}</span></a>`).join(""));
+H("#linkList",SITE.links.map(l=>`<a class="lk-card" href="${esc(l[2])}"${/^https?:/.test(l[2])?' target="_blank" rel="noopener"':""}><b>${esc(l[0])}</b><span>${esc(l[1])}</span></a>`).join(""));
 document.querySelectorAll(".songsLink").forEach(a=>{a.href=SITE.songsUrl;a.target="_blank";a.rel="noopener"});
 /* song list (UTAEMO data, native) */
 function songRow(c){c=(c||"").normalize("NFD")[0]||"";const R=[["あ","あいうえお"],["か","かきくけこ"],["さ","さしすせそ"],["た","たちつてと"],["な","なにぬねの"],["は","はひふへほ"],["ま","まみむめも"],["や","やゆよ"],["ら","らりるれろ"],["わ","わをん"]];for(const r of R)if(r[1].includes(c))return r[0];return "他"}
