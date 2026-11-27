@@ -575,3 +575,26 @@ body.op-wait .h-chara img{animation:none;opacity:0}
 #op3 .olg{filter:drop-shadow(0 0 22px rgba(167,126,232,.55))}
 #op3 .olg img{filter:none!important;animation:none!important}
 #op3.ready .olg{animation:opGlow 1.6s ease-in-out infinite alternate}
+
+/* ---- no awkward line breaks ---- */
+body{line-break:strict}
+p,li,dd,dt,.lead,.slip .m,.sub,.sl-note,.news span{text-wrap:balance}
+.cta,.sl-rand,.modebtn,.mclose,.tag,.badge,.sl-song em,button{white-space:nowrap}
+.cta{padding-left:clamp(22px,6vw,52px);padding-right:clamp(22px,6vw,52px);letter-spacing:.22em}
+.cta:hover{letter-spacing:.26em}
+.panel .cta{display:flex;justify-content:center;width:100%;margin-top:22px}
+.slip .m{font-size:15px;letter-spacing:.05em}
+.slip .luck,.slip .lk{white-space:nowrap}
+.panel.shrine::before{display:none}
+@media(max-width:620px){
+  .news li{flex-wrap:wrap;gap:6px 14px}
+  .news li>span:last-child{flex-basis:100%}
+  .day .t b{white-space:nowrap}
+}
+/* phrase-safe wrapping for Japanese */
+p,li,dd,dt,span,small,.lead,.slip .m,.sub,.news span,.mtile span,.t,.sl-note{word-break:keep-all;overflow-wrap:anywhere}
+.mtile b{white-space:nowrap;font-size:clamp(26px,6vw,52px)}
+.mtile span{letter-spacing:.14em}
+.news li>span:last-child{line-height:1.8}
+html,body{overflow-x:hidden}
+.ph{overflow:hidden;padding-bottom:12px}
