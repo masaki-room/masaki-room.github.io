@@ -10,16 +10,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Cormorant+Garamond:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="img/favicon.png"><link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <header class="ph" data-wm="SONG LIST"><p class="no">03</p><h1>SONG LIST</h1><small>歌える曲リスト</small><div class="bar"></div></header>
 <main class="pg reveal">
-  <div class="eq"><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="frame embed" id="songEmbed">
-    <iframe title="歌える曲リスト" loading="lazy"></iframe>
-    <div class="cap"><span>歌える曲リスト（うたみた）</span><a class="songsLink" href="#" style="color:var(--purple);border-bottom:1px solid var(--purple)">別ウィンドウで開く ↗</a></div>
+  <div class="sl-top">
+    <div class="sl-count"><b id="slN">–</b><span>SONGS</span><b id="slA">–</b><span>ARTISTS</span></div>
+    <p class="sl-upd" id="slU"></p>
   </div>
+  <div class="sl-tools">
+    <input id="slQ" type="search" placeholder="曲名・アーティストで探す" autocomplete="off">
+    <button type="button" class="sl-rand" id="slR">RANDOM</button>
+  </div>
+  <div class="sl-chips" id="slC"></div>
+  <ul class="sl-list" id="slL"></ul>
+  <p class="sl-note">楽曲データ協力：真君　／　<a class="songsLink" href="#" target="_blank" rel="noopener">UTAEMO</a> のデータを使用。エモカラの曲一覧をもとに、実際に歌える曲は変動する場合があります。</p>
   <div class="ticket">
     <div class="stub"><b>REQUEST</b><span>ADMIT ONE</span></div>
     <form id="reqForm">
@@ -30,5 +36,6 @@
     </form>
   </div>
 </main>
-<script src="app.js?v=6"></script>
+<script src="songs-data.js"></script>
+<script src="app.js?v=7"></script>
 </body></html>

@@ -107,7 +107,33 @@ if($("#nextLive")){const nx=weekDays().find(x=>x.s&&!x.past);$("#nextLive").inne
 
 H("#p-dl",SITE.profile.map(i=>`<div class="row"><dt>${esc(i[0])}</dt><dd>${esc(i[1])}</dd></div>`).join(""));
 H("#linkList",SITE.links.map(l=>`<a class="lk-card" href="${esc(l[2])}" target="_blank" rel="noopener"><b>${esc(l[0])}</b><span>${esc(l[1])}</span></a>`).join(""));
-if($("#songEmbed")){$("#songEmbed iframe").src=SITE.songsUrl;document.querySelectorAll(".songsLink").forEach(a=>{a.href=SITE.songsUrl;a.target="_blank";a.rel="noopener"})}
+document.querySelectorAll(".songsLink").forEach(a=>{a.href=SITE.songsUrl;a.target="_blank";a.rel="noopener"});
+/* song list (UTAEMO data, native) */
+function songRow(c){c=(c||"").normalize("NFD")[0]||"";const R=[["あ","あいうえお"],["か","かきくけこ"],["さ","さしすせそ"],["た","たちつてと"],["な","なにぬねの"],["は","はひふへほ"],["ま","まみむめも"],["や","やゆよ"],["ら","らりるれろ"],["わ","わをん"]];for(const r of R)if(r[1].includes(c))return r[0];return "他"}
+const MARK={favorite:"FAVORITE",learning:"練習中",ohako:"十八番"};
+function initSongs(D){
+  const songs=D.songs.slice().sort((x,y)=>x.y.localeCompare(y.y,"ja")||x.ty.localeCompare(y.ty,"ja"));
+  SITE.songs=songs.map(s=>[s.t,s.a,""]);
+  if($("#slL")){
+    let row="全",q="";
+    const arts=new Set(songs.map(s=>s.a));
+    $("#slN").textContent=songs.length;$("#slA").textContent=arts.size;
+    $("#slU").textContent="UPDATED "+String(D.updatedAt).slice(0,10).replace(/-/g,".");
+    const rows=["全",...["あ","か","さ","た","な","は","ま","や","ら","わ","他"].filter(r=>songs.some(s=>songRow(s.y)===r))];
+    $("#slC").innerHTML=rows.map(r=>`<button type="button" data-r="${r}" class="${r==="全"?"on":""}">${r==="全"?"ALL":r}</button>`).join("");
+    const draw=(only)=>{
+      let L=songs.filter(s=>(row==="全"||songRow(s.y)===row)&&(!q||(s.t+s.a+s.ty+s.y).toLowerCase().includes(q)));
+      if(only)L=[only];
+      const g={};L.forEach(s=>(g[s.a]=g[s.a]||[]).push(s));
+      $("#slL").innerHTML=L.length?Object.keys(g).map(a=>`<li class="sl-art"><div class="sl-an">${esc(a)}<small>${g[a].length}曲</small></div>${g[a].map(s=>`<div class="sl-song"><span>${esc(s.t)}</span>${s.m?`<em class="mk-${s.m}">${MARK[s.m]||""}</em>`:""}</div>`).join("")}</li>`).join(""):`<li class="sl-none">見つかりませんでした。リクエスト欄からどうぞ。</li>`;
+    };
+    $("#slC").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;row=b.dataset.r;[...$("#slC").children].forEach(x=>x.classList.toggle("on",x===b));draw()});
+    $("#slQ").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
+    $("#slR").addEventListener("click",()=>{const base=songs.filter(s=>(row==="全"||songRow(s.y)===row));if(base.length){draw(base[Math.floor(Math.random()*base.length)])}});
+    draw();
+  }
+}
+if(window.SONGDATA)initSongs(window.SONGDATA);
 
 /* request */
 if($("#reqForm")){
