@@ -78,7 +78,7 @@ const cur=(location.pathname.split("/").pop()||"index.html");
   $("#burger").onclick=()=>{$("#burger").classList.toggle("open");$("#mmenu").classList.toggle("open")};
   $("#mclose").onclick=mm;$("#mmenu").addEventListener("click",e=>{if(e.target.id==="mmenu"||e.target.closest("a"))mm()});
   addEventListener("keydown",e=>{if(e.key==="Escape")mm()});
-  document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><div class="credit">Site by イロハミント（湊音ヒロ）</div><div class="credit" style="opacity:.55">素材：蝶のイラスト／チコデザ</div></footer>`);
+  document.body.insertAdjacentHTML("beforeend",`<footer><div>© 2026 MASAKI. All Rights Reserved.</div><details class="credits"><summary>CREDITS</summary><div class="credit">Site by イロハミント（湊音ヒロ）</div><div class="credit">素材：蝶のイラスト／チコデザ</div><div class="credit">歌える曲リスト：UTAEMO</div></details></footer>`);
 })();
 
 /* ===== opening (premium v3) ===== */
