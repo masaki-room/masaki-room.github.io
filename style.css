@@ -657,3 +657,11 @@ footer details.credits .credit{margin-top:6px;opacity:.65}
 #op3 .c.st{left:0;width:100%;right:auto;aspect-ratio:auto}
 #op3 .fl{background:#e9defa!important}
 @keyframes opFl{0%{opacity:0}15%{opacity:.55}100%{opacity:0}}
+/* aura: closest-side so it fades to 0 inside its box (no flat top/side edges) */
+.h-chara::before{background:radial-gradient(ellipse closest-side at 50% 52%,rgba(167,126,232,.38),rgba(167,126,232,.12) 55%,transparent 100%)!important}
+body.mono .h-chara::before{background:radial-gradient(ellipse closest-side at 50% 52%,rgba(255,255,255,.26),rgba(255,255,255,.07) 55%,transparent 100%)!important}
+/* glow on wrapper so the image mask doesn't clip it into a rectangle */
+.h-chara img{filter:none!important}
+.h-chara .gl{filter:drop-shadow(0 0 36px rgba(167,126,232,.45))}
+body.mono .h-chara img{filter:none!important}
+body.mono .h-chara .gl{filter:grayscale(1) contrast(1.15) drop-shadow(0 0 30px rgba(255,255,255,.3))}
